@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="icon_bg">#1F4E79</color>
+    <string name="app_name">Commute</string>
+    <string name="widget_description">Your next watched train: time, delay and track</string>
+    <style name="Theme.Commute" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+</resources>

@@ -10,6 +10,8 @@ import android.provider.Settings as AndroidSettings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -108,14 +110,22 @@ fun SettingsScreen(vm: MainViewModel, onBack: () -> Unit) {
         Column(Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState())) {
             Header("Alerts")
             ListItem(
-                headlineContent = { Text("Delay alerts") },
-                supportingContent = { Text("For watched trains leaving within 90 minutes") },
+                headlineContent = { Text("Alerts for watched trains") },
+                supportingContent = { Text("For trains leaving within 90 minutes") },
                 trailingContent = {
                     Switch(checked = settings.alertsEnabled, onCheckedChange = { on -> vm.updateSettings { it.copy(alertsEnabled = on) } })
                 },
             )
             Text(
-                "Alert when at least this late",
+                "Alert me about",
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp).semantics { heading() },
+            )
+            KindSwitch("Delays", "When a train is late, or back on time", settings.alertsEnabled, settings.alertDelays) { on ->
+                vm.updateSettings { it.copy(alertDelays = on) }
+            }
+            Text(
+                "Delay alert when at least this late",
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
@@ -130,6 +140,17 @@ fun SettingsScreen(vm: MainViewModel, onBack: () -> Unit) {
                     )
                 }
             }
+            KindSwitch("Cancellations", null, settings.alertsEnabled, settings.alertCancellations) { on ->
+                vm.updateSettings { it.copy(alertCancellations = on) }
+            }
+            KindSwitch("Track changes", null, settings.alertsEnabled, settings.alertTrackChanges) { on ->
+                vm.updateSettings { it.copy(alertTrackChanges = on) }
+            }
+            KindSwitch(
+                "Traffic notices",
+                "Fewer carriages, works, other messages. Still shown in the app.",
+                settings.alertsEnabled, settings.alertNotices,
+            ) { on -> vm.updateSettings { it.copy(alertNotices = on) } }
             if (!canNotify && Build.VERSION.SDK_INT >= 33) {
                 ActionRow("Notifications are off for this app", "Allow") {
                     permission.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -211,6 +232,16 @@ fun SettingsScreen(vm: MainViewModel, onBack: () -> Unit) {
             vm.replaceWindow(w.copy(start = s, end = e, days = d)); editing = null
         }
     }
+}
+
+@Composable
+private fun KindSwitch(title: String, detail: String?, enabled: Boolean, checked: Boolean, onChange: (Boolean) -> Unit) {
+    ListItem(
+        headlineContent = { Text(title) },
+        supportingContent = detail?.let { { Text(it) } },
+        trailingContent = { Switch(checked = checked, enabled = enabled, onCheckedChange = null) },
+        modifier = Modifier.toggleable(value = checked, enabled = enabled, role = Role.Switch, onValueChange = onChange),
+    )
 }
 
 @Composable

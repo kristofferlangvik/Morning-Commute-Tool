@@ -55,7 +55,8 @@ object Engine {
                     val key = AlertRules.key(st.id, d)
                     val (state, alerts) = AlertRules.evaluate(states[key], d, st.name, settings.thresholdMin)
                     states[key] = state
-                    alerts.forEach { Notifications.alert(context, key, st.id, it) }
+                    // State is updated either way, so switching a kind back on doesn't replay old alerts.
+                    alerts.filter { settings.wants(it.kind) }.forEach { Notifications.alert(context, key, st.id, it) }
                 }
             }
         }

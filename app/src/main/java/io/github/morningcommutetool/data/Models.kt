@@ -85,7 +85,20 @@ data class Settings(
     val alertsEnabled: Boolean = true,
     val thresholdMin: Int = 3,
     val windows: List<ActiveWindow> = emptyList(),
+    // Which kinds of alert to send. Traffic notices are things like
+    // "fewer carriages" or works announcements, not timing changes.
+    val alertDelays: Boolean = true,
+    val alertCancellations: Boolean = true,
+    val alertTrackChanges: Boolean = true,
+    val alertNotices: Boolean = true,
 ) {
+    fun wants(kind: AlertRules.Kind): Boolean = alertsEnabled && when (kind) {
+        AlertRules.Kind.DELAY, AlertRules.Kind.RECOVERED -> alertDelays
+        AlertRules.Kind.CANCELLED -> alertCancellations
+        AlertRules.Kind.TRACK -> alertTrackChanges
+        AlertRules.Kind.NOTICE -> alertNotices
+    }
+
     fun inWindow(now: ZonedDateTime = ZonedDateTime.now(OSLO)): Boolean = windows.any { it.contains(now) }
 }
 

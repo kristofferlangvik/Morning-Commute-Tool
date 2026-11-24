@@ -52,3 +52,13 @@ class AlertRulesTest {
         assertEquals(false, Station("S", "S", lines = setOf("X1"), destinations = setOf("Elsewhere")).shows(d))
     }
 }
+
+class AlertKindSettingsTest {
+    @Test fun noticesCanBeTurnedOffWithoutAffectingTiming() {
+        val s = Settings(alertNotices = false)
+        assertEquals(false, s.wants(AlertRules.Kind.NOTICE))
+        assertTrue(s.wants(AlertRules.Kind.DELAY) && s.wants(AlertRules.Kind.RECOVERED))
+        assertTrue(s.wants(AlertRules.Kind.CANCELLED) && s.wants(AlertRules.Kind.TRACK))
+        assertEquals(false, Settings(alertsEnabled = false).wants(AlertRules.Kind.DELAY))
+    }
+}

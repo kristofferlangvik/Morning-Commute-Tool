@@ -6,7 +6,7 @@ A small personal Android app for keeping an eye on Norwegian trains, using real-
 
 - **Saved stations.** Search for any station and add it. Each station shows its upcoming departures: time (large), line, destination, live status and track.
 - **Filters = watched trains.** Per station, pick lines and/or destinations from chips. Matching trains are the only ones shown for that station, and they are *watched*.
-- **Alerts** for watched trains leaving within 90 minutes: delayed beyond your threshold (default 3 min), cancelled, track change, or a new traffic notice. Each change is notified once; updates replace the earlier notification. Separate "Delays and changes" channel.
+- **Alerts** for watched trains leaving within 90 minutes: delayed beyond your threshold (default 3 min), cancelled, track change, or a new traffic notice. Each change is notified once; updates replace the earlier notification. Each kind can be switched on or off in Settings (e.g. keep timing alerts, mute traffic notices like "fewer carriages"). Separate "Delays and changes" channel.
 - **Home-screen widget** with the next watched departure (line, time, delay, track) and the one after.
 - **Active hours.** During windows you set (e.g. weekday mornings), the app checks every minute and shows the next watched train in a silent ongoing notification. Outside them it checks every 15 minutes in the background.
 - **Follow a train.** Tap a departure → *Follow this train* for a live status notification showing where the train is, until it leaves your station. On Android 16+ this is a Live Update.
